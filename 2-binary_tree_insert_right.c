@@ -1,21 +1,36 @@
 #include "binary_trees.h"
 
 /**
- * binary_tree_leaves - Counts the leaves in a binary tree.
- * @tree: A pointer to the root node of the tree to count the leaves of.
+ * binary_tree_insert_right - Insert a node as the right-child
+ *                            of another in a binary tree.
+ * @parent: A pointer to the node to insert the right-child in.
+ * @value: The value to store in the new node.
  *
- * Return: The number of leaves in the tree.
+ * Return: If parent is NULL or an error occurs - NULL.
+ *         Otherwise - a pointer to the new node.
+ *
+ * Description: If parent already has a right-child, the new node
+ *              takes its place and the old right-child is set as
+ *              the right-child of the new node.
  */
-size_t binary_tree_leaves(const binary_tree_t *tree)
+binary_tree_t *binary_tree_insert_right(binary_tree_t *parent, int value)
 {
-	size_t leaves = 0;
+	binary_tree_t *new;
 
-	if (tree)
+	if (parent == NULL)
+		return (NULL);
+
+	new = binary_tree_node(parent, value);
+	if (new == NULL)
+		return (NULL);
+
+	if (parent->right != NULL)
 	{
-		leaves += (!tree->left && !tree->right) ? 1 : 0;
-		leaves += binary_tree_leaves(tree->left);
-		leaves += binary_tree_leaves(tree->right);
+		new->right = parent->right;
+		parent->right->parent = new;
 	}
-	return (leaves);
+	parent->right = new;
+
+	return (new);
 }
 
